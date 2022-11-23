@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BookProject</string>
+
+    <string name="navigation_books_title">Books</string>
+    <string name="navigation_settings_title">Settings</string>
+    <string name="settings_tab_title">Settings</string>
+</resources>
