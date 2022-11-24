@@ -135,11 +135,3 @@ fun BottomNavigationBar(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//    BookProjectTheme {
-//        Greeting("Android")
-//    }
-//}
