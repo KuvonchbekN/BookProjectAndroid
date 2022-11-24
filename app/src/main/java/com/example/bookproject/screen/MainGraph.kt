@@ -6,28 +6,29 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.bookproject.BottomNavItem
 import com.example.bookproject.detailedView.DetailedView
 import com.example.bookproject.list.BooksList
 import com.example.bookproject.settings.Settings
+import com.example.bookproject.utils.Graph
 
 @Composable
 fun BottomBarGraph(navHostController: NavHostController ){
-    NavHost(navController = navHostController, route = "home", startDestination = "bookList"){
-        composable("bookList"){
+    NavHost(navController = navHostController, route = Graph.HOME, startDestination = BottomNavItem.BookList.route){
+        composable(route = BottomNavItem.BookList.route){
             BooksList(navHostController)
         }
 
-        composable("settings"){
+        composable(route = BottomNavItem.Settings.route){
             Settings()
         }
-
         detailNavGraph()
     }
 }
 
 fun NavGraphBuilder.detailNavGraph(){
-    navigation(route = "detail/{bookId}", startDestination = "detail"){
-        composable("detail", arguments = listOf(
+    navigation(route = "${Graph.DETAILS}/{bookId}", startDestination = "DETAIL"){
+        composable(route = "DETAIL", arguments = listOf(
             navArgument(
                 name = "bookId"
             ){

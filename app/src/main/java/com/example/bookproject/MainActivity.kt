@@ -34,9 +34,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     //navigation
-                    val navController = rememberNavController()
                     
-                    RootNavGraph(navHostController = navController)
+                    RootNavGraph(navHostController = rememberNavController())
 
 //                    Scaffold(bottomBar = {
 //                        BottomNavigationBar(
