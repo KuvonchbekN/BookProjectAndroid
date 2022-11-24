@@ -31,10 +31,10 @@ fun DetailedView(bookId: String, viewModel: DetailedViewModel = DetailedViewMode
             modifier = Modifier
                 .fillMaxSize()
                 .background(colorResource(R.color.white_background))
-                .padding(15.dp)
+                .padding(16.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom
             ) {
                 Name(name = book!!.name)
@@ -47,8 +47,9 @@ fun DetailedView(bookId: String, viewModel: DetailedViewModel = DetailedViewMode
             CustomDivider()
             Spacer(modifier = Modifier.height(16.dp))
             if (!book!!.authors.isNullOrEmpty()){
-                Authors(authors = book!!.authors)
+                Authors(authors = book!!.authors!!)
             }
+
             //TODO implement edit button here
 
             //EditButton {
@@ -113,8 +114,8 @@ private fun Authors(authors: List<String>) {
 @Composable
 private fun AuthorNameView(author: String) {
     Text(
-        text = "- $author",
         modifier = Modifier.padding(6.dp, 3.dp),
+        text = "- $author",
         color = Color.DarkGray,
         fontSize = 19.sp,
         fontFamily = FontFamily.SansSerif,

@@ -22,6 +22,10 @@ class DetailedViewModel(bookId: String) : ViewModel() {
         MutableLiveData<Book>()
     }
 
+    init{
+        getBookById(bookId)
+    }
+
     private fun getBookById(bookId: String) {
         viewModelScope.launch {
             try {
