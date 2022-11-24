@@ -65,7 +65,7 @@ fun AddNewBookView(viewModel: AddNewBookViewModel = AddNewBookViewModel()) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color.White)
+            .background(colorResource(id = R.color.book_list_b_color))
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {

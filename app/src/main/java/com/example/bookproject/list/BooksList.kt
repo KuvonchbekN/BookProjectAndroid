@@ -22,13 +22,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.bookproject.R
 import com.example.bookproject.addNew.AddNewActivity
 import com.example.bookproject.models.Book
 
 @Composable
 fun BooksList(
-    onBookClick: (String) -> Unit = {},
+    onBookClick: NavHostController,
     viewModel: ListViewModel = ListViewModel()
 ) {
     val context = LocalContext.current
@@ -45,7 +46,7 @@ fun BooksList(
         ) {
             books?.let {
                 items(items = it.toList(), itemContent = { item ->
-                    BookItem(book = item, onBookClick)
+                    BookItem(book = item, onBookClick =  {}) //TODO need to work here
                 })
             }
         }
