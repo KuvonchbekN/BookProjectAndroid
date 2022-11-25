@@ -22,6 +22,11 @@ class DetailedViewModel(bookId: String) : ViewModel() {
         MutableLiveData<Book>()
     }
 
+    val bookUpdateResponse: MutableLiveData<MyResponse> by lazy {  //this is always used in front-end, exactly in the class which composables exist!, coz we need to show the data to the user
+        MutableLiveData<MyResponse>()
+    }
+
+
     init{
         getBookById(bookId)
     }
@@ -55,6 +60,7 @@ class DetailedViewModel(bookId: String) : ViewModel() {
                 val updateOneBookById = RetrofitInstance.bookService.updateOneBookById(
                     bookId, Constants.STUDENT_ID, bookRequest
                 )
+                bookUpdateResponse.value = updateOneBookById
                 Log.d("Update Response", updateOneBookById.toString())
             } catch (e: Exception) {
                 e.printStackTrace()

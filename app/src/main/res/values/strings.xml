@@ -16,4 +16,8 @@
     <string name="add_new_failed_to_save_msg">Failed to save</string>
     <string name="add_new_in_progress_mgs">In progress</string>
     <string name="list_add_new_text">Add new</string>
+    <string name="edit_button">Edit</string>
+    <string name="delete_button">Delete</string>
+    <string name="update_button">Update</string>
+    <string name="add_new_updated_successfully_msg">Updated Successfully</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.bookproject.addNew
+package com.example.bookproject.edit
 
 import android.content.Context
 import android.content.Intent
@@ -29,78 +29,93 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.example.bookproject.MainActivity
 import com.example.bookproject.R
+import com.example.bookproject.detailedView.DetailedViewModel
 import com.example.bookproject.network.book.BookRequest
 import com.example.bookproject.network.response.MyResponse
+import com.example.bookproject.utils.mergeAuthors
 import com.example.bookproject.utils.splitAuthorsInputtedByComma
 
 
 @Composable
-fun AddNewBookView(viewModel: AddNewBookViewModel = AddNewBookViewModel()) {
+fun EditBookView(bookId: String = "", viewModel: DetailedViewModel = DetailedViewModel(bookId)) {
 
     val context = LocalContext.current
 
-    val name = remember {
-        mutableStateOf("")
-    }
 
-    val description = remember {
-        mutableStateOf("")
-    }
-
-    val authors = remember {
-        mutableStateOf("")
-    }
-
-    val price = remember {
-        mutableStateOf("")
-    }
+    val response by viewModel.bookUpdateResponse.observeAsState()
+    val book by viewModel.bookLiveData.observeAsState()
 
     val isProgressVisible = remember {
         mutableStateOf(false)
     }
 
-    val response by viewModel.bookInsertResponse.observeAsState()
+    if (book != null) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colorResource(id = R.color.book_list_b_color))
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        NameInput(name = name.value, onNameChange = { name.value = it })
-        Spacer(Modifier.height(16.dp))
-        DescriptionInput(
-            description = description.value,
-            onDescriptionChange = { description.value = it })
-        Spacer(Modifier.height(16.dp))
-        AuthorsInput(authors = authors.value, onAuthorsChange = { authors.value = it })
-        Spacer(Modifier.height(16.dp))
-        PriceInput(price = price.value, onPriceChange = { price.value = it })
-        Spacer(Modifier.height(16.dp))
-
-        val notValidMessage = stringResource(id = R.string.inputs_not_valid)
-        AddNewButton {
-            if (isInputValid(name.value, description.value, authors.value, price.value)) {
-                viewModel.saveNewBookToRemoteDb(
-                    BookRequest(
-                        name = name.value,
-                        description = description.value,
-                        splitAuthorsInputtedByComma(authors.value),
-                        price.value
-                    )
-                )
-                isProgressVisible.value = true;
-            }else{
-                val toast = Toast.makeText(context, notValidMessage,Toast.LENGTH_SHORT)
-                toast.setGravity(Gravity.CENTER, 0, 0)
-                toast.show()
-            }
+        val name = remember {
+            mutableStateOf(book!!.name)
         }
 
-    }
+        val description = remember {
+            mutableStateOf(book!!.description)
+        }
 
-    response?.let { ProgressWidget(response = it, isVisible= isProgressVisible.value, context) }
+        val authors = remember {
+            mutableStateOf(book!!.authors)
+        }
+
+        val mergedAuthors = remember {
+             mutableStateOf( mergeAuthors(authors.value));
+        }
+
+
+
+        val price = remember {
+            mutableStateOf(book!!.price)
+        }
+
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colorResource(id = R.color.book_list_b_color))
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            NameInput(name = name.value, onNameChange = { name.value = it })
+            Spacer(Modifier.height(16.dp))
+            DescriptionInput(
+                description = description.value,
+                onDescriptionChange = { description.value = it })
+            Spacer(Modifier.height(16.dp))
+            AuthorsInput(authors = mergedAuthors.value, onAuthorsChange = { mergedAuthors.value = it })
+            Spacer(Modifier.height(16.dp))
+            PriceInput(price = price.value, onPriceChange = { price.value = it })
+            Spacer(Modifier.height(16.dp))
+
+            val notValidMessage = stringResource(id = R.string.inputs_not_valid)
+            UpdateButton {
+                if (isInputValid(name.value, description.value, mergedAuthors.value, price.value)) {
+                    viewModel.editBookById(
+                        bookId,
+                        BookRequest(
+                            name = name.value,
+                            description = description.value,
+                            splitAuthorsInputtedByComma(mergedAuthors.value),
+                            price.value
+                        )
+                    )
+                    isProgressVisible.value = true;
+                } else {
+                    val toast = Toast.makeText(context, notValidMessage, Toast.LENGTH_SHORT)
+                    toast.setGravity(Gravity.CENTER, 0, 0)
+                    toast.show()
+                }
+            }
+
+        }
+    }
+    response?.let { ProgressWidget(response = it, isVisible = isProgressVisible.value, context) }
 
 }
 
@@ -120,12 +135,13 @@ private fun ProgressWidget(response: MyResponse, isVisible: Boolean, context: Co
                 fontSize = 25.sp,
                 text =
                 if (response.status.isEmpty()) stringResource(id = R.string.add_new_in_progress_mgs) //by default status is "", so if it is empty that means network request hasn't returned a response yet
-                else if (response.status == "OK") stringResource(id = R.string.add_new_saved_successfully_msg)
+                else if (response.status == "OK") stringResource(id = R.string.add_new_updated_successfully_msg)
                 else stringResource(id = R.string.add_new_failed_to_save_msg)
             )
         }
 
         context.startActivity(Intent(context, MainActivity::class.java))
+        (context as EditActivity).finishAffinity() //put the stack to the main activity
     }
 }
 
@@ -194,7 +210,7 @@ private fun PriceInput(price: String, onPriceChange: (String) -> Unit) {
 }
 
 @Composable
-private fun AddNewButton(onClick: () -> Unit) {
+private fun UpdateButton(onClick: () -> Unit) {
     Button(
         onClick = { onClick() },
         modifier = Modifier
@@ -202,7 +218,7 @@ private fun AddNewButton(onClick: () -> Unit) {
             .height(75.dp)
             .padding(vertical = 16.dp)
     ) {
-        Text(text = stringResource(id = R.string.save_button_text))
+        Text(text = stringResource(id = R.string.update_button))
     }
 }
 

@@ -17,3 +17,14 @@ fun getListOfAuthorsFromResponse(
 fun splitAuthorsInputtedByComma(authorsInput:String):List<String>{
     return authorsInput.split(",")
 }
+
+fun mergeAuthors(authorsList : List<String> ) : String{
+    var s = ""
+    for ((index, author) in authorsList.withIndex()){
+        s += author
+        if (index != authorsList.size-1){
+            s+= ","
+        }
+    }
+    return s
+}

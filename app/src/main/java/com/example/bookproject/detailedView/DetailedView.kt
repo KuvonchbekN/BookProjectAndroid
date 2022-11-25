@@ -1,7 +1,9 @@
 package com.example.bookproject.detailedView
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -18,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bookproject.R
+import com.example.bookproject.edit.EditActivity
 
 
 //this is itself one big composable and inside of it there are some items like name, description, price and etc.
@@ -25,6 +29,7 @@ import com.example.bookproject.R
 fun DetailedView(bookId: String, viewModel: DetailedViewModel = DetailedViewModel(bookId)) {
 
     val book by viewModel.bookLiveData.observeAsState()
+    val context = LocalContext.current
 
     if (book != null) {
         Column(
@@ -46,20 +51,35 @@ fun DetailedView(bookId: String, viewModel: DetailedViewModel = DetailedViewMode
             Spacer(modifier = Modifier.height(16.dp))
             CustomDivider()
             Spacer(modifier = Modifier.height(16.dp))
-            if (!book!!.authors.isNullOrEmpty()){
+            if (!book!!.authors.isNullOrEmpty()) {
                 Authors(authors = book!!.authors!!)
             }
 
-            //TODO implement edit button here
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = {
+                        val intent = Intent(context, EditActivity::class.java)
+                        intent.putExtra("data", bookId)
+                        context.startActivity(intent)
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = stringResource(id = R.string.edit_button))
+                }
 
-            //EditButton {
-//                viewModel.editMovieById(movieId, MovieRequest(
-//                    movie!!.name,
-//                    "test desc",
-//                    movie!!.actors,
-//                    movie!!.budget))
-//            }
 
+                Spacer(modifier = Modifier.width(10.dp))
+
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = stringResource(id = R.string.delete_button))
+                }
+            }
         }
     }
 
@@ -103,7 +123,7 @@ private fun Description(description: String) {
 
 @Composable
 private fun Authors(authors: List<String>) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         for (author in authors) {
             AuthorNameView(author = author)
         }
@@ -129,7 +149,6 @@ private fun CustomDivider() {
         color = Color.LightGray
     )
 }
-
 
 
 //todo I can implement edit button here
