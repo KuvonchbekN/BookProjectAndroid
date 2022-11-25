@@ -141,7 +141,7 @@ private fun ProgressWidget(response: MyResponse, isVisible: Boolean, context: Co
         }
 
         context.startActivity(Intent(context, MainActivity::class.java))
-        (context as EditActivity).finishAffinity() //put the stack to the main activity
+        (context as EditActivity).finishAffinity() //set the head of the stack to the main activity
     }
 }
 
@@ -176,7 +176,6 @@ private fun DescriptionInput(description: String, onDescriptionChange: (String) 
         }
     )
 }
-
 
 @Composable
 private fun AuthorsInput(authors: String, onAuthorsChange: (String) -> Unit) {

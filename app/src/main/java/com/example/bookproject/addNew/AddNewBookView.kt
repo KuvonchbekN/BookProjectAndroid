@@ -126,6 +126,7 @@ private fun ProgressWidget(response: MyResponse, isVisible: Boolean, context: Co
         }
 
         context.startActivity(Intent(context, MainActivity::class.java))
+        (context as AddNewActivity).finishAffinity()
     }
 }
 

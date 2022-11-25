@@ -1,6 +1,8 @@
 package com.example.bookproject.detailedView
 
 import android.content.Intent
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -20,6 +22,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.bookproject.MainActivity
 import com.example.bookproject.R
 import com.example.bookproject.edit.EditActivity
 
@@ -72,9 +75,18 @@ fun DetailedView(bookId: String, viewModel: DetailedViewModel = DetailedViewMode
 
 
                 Spacer(modifier = Modifier.width(10.dp))
-
+                val deletedMsg = stringResource(id = R.string.deleted_successfully_msg)
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        viewModel.deleteOneBookById(bookId)
+                        val toast = Toast.makeText(context, deletedMsg,Toast.LENGTH_SHORT)
+                        toast.setGravity(Gravity.CENTER, 0, 0)
+                        toast.show()
+
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
+                        (context as MainActivity).finishAffinity()
+                    },
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(text = stringResource(id = R.string.delete_button))
