@@ -21,4 +21,19 @@
     <string name="update_button">Update</string>
     <string name="add_new_updated_successfully_msg">Updated Successfully</string>
     <string name="deleted_successfully_msg">Book deleted successfully!</string>
+    <string name="check_your_profile">Check you profile</string>
+    <string name="my_email">johndoe@mail.ru</string>
+    <string name="view">View</string>
+    <string name="general_settings_text">General</string>
+    <string name="notification_text">Notifications</string>
+    <string name="general_settings">General</string>
+    <string name="Notification">Notifications</string>
+    <string name="customize_notification_text">Customize notifications</string>
+    <string name="more_customization_text">More customization</string>
+    <string name="customization_text_description">Customize it more to fit your usage</string>
+    <string name="support_text">Support</string>
+    <string name="contact_text">Contact</string>
+    <string name="feedback_text">Feedback</string>
+    <string name="privacy_policy_text">Privacy Policy</string>
+    <string name="about_text">About</string>
 </resources>

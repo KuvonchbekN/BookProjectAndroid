@@ -10,5 +10,7 @@
     <color name="white_background">#CFC4C4</color>
     <color name="book_list_b_color">#91D5CB</color>
     <color name="add_new_movie_text_color">#F5F8F7</color>
+    <color name="colorPrimary">#77AAC0</color>
+    <color name="colorSecondary">#80CBC4</color>
 
 </resources>

@@ -33,7 +33,7 @@ fun BottomBar(navController: NavHostController) {
     val bottomBarDestination = screens.any { it.route == currentDestination?.route }
     if (bottomBarDestination) {
         BottomNavigation(
-            backgroundColor = Color.Red
+            backgroundColor = colorResource(id = R.color.colorPrimary)
         ) {
             screens.forEach { screen ->
                 AddItem(
@@ -63,8 +63,8 @@ fun RowScope.AddItem(
         selected = currentDestination?.hierarchy?.any {
             it.route == screen.route
         } == true,
-        unselectedContentColor = colorResource(id = R.color.purple_200),
-        selectedContentColor = colorResource(id = R.color.purple_500),
+        unselectedContentColor = Color.Gray,
+        selectedContentColor = Color.DarkGray,
         onClick = {
             navController.navigate(screen.route) {
                 popUpTo(navController.graph.findStartDestination().id) //This will return to the first page does not add to the stack
