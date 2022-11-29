@@ -12,5 +12,9 @@
     <color name="add_new_movie_text_color">#F5F8F7</color>
     <color name="colorPrimary">#77AAC0</color>
     <color name="colorSecondary">#80CBC4</color>
+    <color name="lightColorBack">#fff</color>
+    <color name="darkColorBack">#808080</color>
+    <color name="lightColorText">#fff</color>
+    <color name="darkColorText">#808080</color>
 
 </resources>

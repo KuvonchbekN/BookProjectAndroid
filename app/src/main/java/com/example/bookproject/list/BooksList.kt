@@ -1,6 +1,8 @@
 package com.example.bookproject.list
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,8 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.dataStore
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.bookproject.R
@@ -36,6 +38,15 @@ fun BooksList(
 ) {
     val context = LocalContext.current
 
+
+
+    var sharedPreferences: SharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE)
+    var color = Color.White
+    if (    !sharedPreferences.getBoolean("THEME_KEY",false)){
+        color =  Color.Gray
+    }
+
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         val books by viewModel.booksLiveData.observeAsState()
@@ -43,7 +54,7 @@ fun BooksList(
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
-                .background(colorResource(id = R.color.book_list_b_color))
+                .background(color)
                 .padding(0.dp, 0.dp, 0.dp, 50.dp)
         ) {
             books?.let {
@@ -102,7 +113,7 @@ fun Description(description: String) {
     Text(
         text = description,
         color = Color.DarkGray,
-        fontSize = 20.sp,
+        fontSize = 14.sp,
         fontFamily = FontFamily.Serif,
         textAlign = TextAlign.Center
     )

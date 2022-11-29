@@ -1,6 +1,12 @@
+@file:JvmName("SettingsKt")
+
 package com.example.bookproject.settingsScreen
 
-import androidx.compose.foundation.Image
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -9,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -17,17 +24,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.bookproject.MainActivity
 import com.example.bookproject.ui.theme.Shapes
 import com.example.bookproject.R
+import com.example.bookproject.addNew.AddNewActivity
 
 
 @ExperimentalMaterialApi
 @Composable
-fun SettingsScreen() {
-    Column() {
+fun Settings() {
+    val context = LocalContext.current
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE)
+    var color = Color.White
+
+    var backgroundColor = Color.White
+    var textColor = Color.Gray
+
+    if (!sharedPreferences.getBoolean("THEME_KEY",false)){
+        color =  Color.Gray
+    }
+    Column(modifier = Modifier.background(color).fillMaxHeight(), ) {
         HeaderText()
         GeneralOptionsUI()
-        SupportOptionsUI()
+        SupportOptionsUI(color)
     }
 }
 
@@ -51,6 +70,12 @@ fun HeaderText() {
 @ExperimentalMaterialApi
 @Composable
 fun GeneralOptionsUI() {
+    val context = LocalContext.current
+
+    var sharedPreferences: SharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE)
+    var editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+
     Column(
         modifier = Modifier
             .padding(horizontal = 14.dp)
@@ -69,7 +94,20 @@ fun GeneralOptionsUI() {
             icon = R.drawable.ic_rounded_notification,
             mainText = stringResource(R.string.Notification),
             subText = stringResource(R.string.customize_notification_text),
-            onClick = {}
+            onClick = {
+                Log.d("@@@", "Worked!")
+                if(sharedPreferences.getBoolean("THEME_KEY", false)){
+                    editor.putBoolean("THEME_KEY", false);
+                    editor.apply()
+                    Log.d("@@@", "Edited false!")
+                }else{
+                    editor.putBoolean("THEME_KEY", true)
+                    editor.apply()
+                    Log.d("@@@", "Edited true!")
+                }
+                context.startActivity(Intent(context, MainActivity::class.java))
+                (context as MainActivity).finishAffinity()
+            }
         )
         GeneralSettingItem(
             icon = R.drawable.ic_more,
@@ -145,7 +183,7 @@ fun GeneralSettingItem(icon: Int, mainText: String, subText: String, onClick: ()
 
 @ExperimentalMaterialApi
 @Composable
-fun SupportOptionsUI() {
+fun SupportOptionsUI(color: Color) {
     Column(
         modifier = Modifier
             .padding(horizontal = 14.dp)
@@ -163,32 +201,38 @@ fun SupportOptionsUI() {
         SupportItem(
             icon = R.drawable.ic_whatsapp,
             mainText = stringResource(R.string.contact_text),
-            onClick = {}
+            onClick = {
+
+            },
+            color = color
         )
         SupportItem(
             icon = R.drawable.ic_feedback,
             mainText = stringResource(R.string.feedback_text),
-            onClick = {}
+            onClick = {},
+            color = color
         )
         SupportItem(
             icon = R.drawable.ic_privacy_policy,
             mainText = stringResource(R.string.privacy_policy_text),
-            onClick = {}
+            onClick = {},
+            color = color
         )
         SupportItem(
             icon = R.drawable.ic_about,
             mainText = stringResource(R.string.about_text),
-            onClick = {}
+            onClick = {},
+            color = color
         )
     }
 }
 
 @ExperimentalMaterialApi
 @Composable
-fun SupportItem(icon: Int, mainText: String, onClick: () -> Unit) {
+fun SupportItem(icon: Int, mainText: String, onClick: () -> Unit, color: Color) {
     Card(
         onClick = { onClick() },
-        backgroundColor = Color.White,
+        backgroundColor = color,
         modifier = Modifier
             .padding(bottom = 8.dp)
             .fillMaxWidth(),

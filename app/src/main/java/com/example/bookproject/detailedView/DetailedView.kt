@@ -47,15 +47,15 @@ fun DetailedView(bookId: String, viewModel: DetailedViewModel = DetailedViewMode
             ) {
                 Name(name = book!!.name)
                 Spacer(modifier = Modifier.weight(1f))
-                Price(price = book!!.price)
             }
 
             Description(description = book!!.description)
             Spacer(modifier = Modifier.height(16.dp))
+            Price(price = book!!.price)
             CustomDivider()
             Spacer(modifier = Modifier.height(16.dp))
             if (!book!!.authors.isNullOrEmpty()) {
-                Authors(authors = book!!.authors!!)
+                Authors(authors = book!!.authors)
             }
 
             Row(
@@ -116,7 +116,7 @@ private fun Price(price: String) {
         modifier = Modifier.padding(bottom = 3.dp),
         text = stringResource(id = R.string.price_of_book, price),
         color = Color.Black,
-        fontSize = 15.sp,
+        fontSize = 12.sp,
         fontFamily = FontFamily.SansSerif
     )
 }
