@@ -27,12 +27,12 @@
     <string name="general_settings_text">General</string>
     <string name="notification_text">Notifications</string>
     <string name="general_settings">General</string>
-    <string name="Notification">Notifications</string>
-    <string name="customize_notification_text">Customize notifications</string>
+    <string name="Theme">Theme</string>
+    <string name="customize_theme_text">Change the theme</string>
     <string name="more_customization_text">More customization</string>
     <string name="customization_text_description">Customize it more to fit your usage</string>
     <string name="support_text">Support</string>
-    <string name="contact_text">Contact</string>
+    <string name="contact_text">Location</string>
     <string name="feedback_text">Feedback</string>
     <string name="privacy_policy_text">Privacy Policy</string>
     <string name="about_text">About</string>

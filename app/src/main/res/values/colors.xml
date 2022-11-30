@@ -15,6 +15,6 @@
     <color name="lightColorBack">#fff</color>
     <color name="darkColorBack">#808080</color>
     <color name="lightColorText">#fff</color>
-    <color name="darkColorText">#808080</color>
+    <color name="darkColorText">#2E2D2D</color>
 
 </resources>
