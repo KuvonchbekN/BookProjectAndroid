@@ -2,6 +2,7 @@ package com.example.bookproject.addNew
 
 import android.content.Context
 import android.content.Intent
+import android.icu.text.DateTimePatternGenerator.PatternInfo.OK
 import android.view.Gravity
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -120,7 +121,7 @@ private fun ProgressWidget(response: MyResponse, isVisible: Boolean, context: Co
                 fontSize = 25.sp,
                 text =
                 if (response.status.isEmpty()) stringResource(id = R.string.add_new_in_progress_mgs) //by default status is "", so if it is empty that means network request hasn't returned a response yet
-                else if (response.status == "OK") stringResource(id = R.string.add_new_saved_successfully_msg)
+                else if (response.status == stringResource(id = R.string.OK)) stringResource(id = R.string.add_new_saved_successfully_msg)
                 else stringResource(id = R.string.add_new_failed_to_save_msg)
             )
         }

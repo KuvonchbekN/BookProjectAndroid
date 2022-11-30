@@ -163,25 +163,6 @@ private fun CustomDivider() {
 }
 
 
-//todo I can implement edit button here
-//@Composable
-//private fun EditButton(onClick: () -> Unit) {
-//    Button(
-//        onClick = {
-//            onClick()
-//        },
-//        modifier = Modifier
-//            .width(150.dp)
-//            .height(75.dp)
-//            .padding(vertical = 16.dp)
-//    ) {
-//        Text(
-//            text = stringResource(id = R.string.edit_movie_button_text)
-//        )
-//    }
-//}
-
-
 
 
 

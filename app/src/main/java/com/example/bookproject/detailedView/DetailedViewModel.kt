@@ -61,7 +61,6 @@ class DetailedViewModel(bookId: String) : ViewModel() {
                     bookId, Constants.STUDENT_ID, bookRequest
                 )
                 bookUpdateResponse.value = updateOneBookById
-                Log.d("Update Response", updateOneBookById.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -73,7 +72,6 @@ class DetailedViewModel(bookId: String) : ViewModel() {
             try {
                 val response: MyResponse =
                     RetrofitInstance.bookService.deleteOneBookById(bookId, Constants.STUDENT_ID)
-                Log.d("Deleted book response: ", response.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -3,14 +3,12 @@
 package com.example.bookproject.settingsScreen
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -29,12 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.example.bookproject.MainActivity
 import com.example.bookproject.R
 import com.example.bookproject.ui.theme.Shapes
+import com.example.bookproject.utils.Constants
 import com.google.accompanist.permissions.*
 
 
@@ -46,7 +44,7 @@ fun Settings() {
 
     var colorBack = colorResource(id = R.color.lightColorBack)
     var colorText = colorResource(id = R.color.darkColorText)
-    if (!sharedPreferences.getBoolean("THEME_KEY", false)) { //false is the default value
+    if (!sharedPreferences.getBoolean(Constants.THEME_KEY, false)) { //false is the default value
         colorBack = colorResource(id = R.color.darkColorBack)
         colorText = colorResource(id = R.color.lightColorText)
     }
@@ -57,19 +55,19 @@ fun Settings() {
             .background(colorBack)
             .fillMaxHeight()
     ) {
-        HeaderText()
-        GeneralOptionsUI(colorText)
+        HeaderText(colorText)
+        GeneralOptionsUI(colorText, colorText)
         SupportOptionsUI(colorBack, colorText)
     }
 }
 
 
 @Composable
-fun HeaderText() {
+fun HeaderText(colorText: Color) {
     Text(
         text = stringResource(id = R.string.settings_tab_title),
         fontFamily = FontFamily.Serif,
-        color = colorResource(id = R.color.colorSecondary),
+        color = colorText,
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
@@ -82,7 +80,7 @@ fun HeaderText() {
 
 @ExperimentalMaterialApi
 @Composable
-fun GeneralOptionsUI(colorBack: Color) {
+fun GeneralOptionsUI(colorBack: Color, colorText: Color) {
     val context = LocalContext.current
 
     var sharedPreferences: SharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE)
@@ -97,7 +95,7 @@ fun GeneralOptionsUI(colorBack: Color) {
         Text(
             text = stringResource(R.string.general_settings),
             fontFamily = FontFamily.Serif,
-            color = colorResource(id = R.color.colorSecondary),
+            color = colorText,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
@@ -108,15 +106,12 @@ fun GeneralOptionsUI(colorBack: Color) {
             mainText = stringResource(R.string.Theme),
             subText = stringResource(R.string.customize_theme_text),
             onClick = {
-                Log.d("@@@", "Worked!")
-                if (sharedPreferences.getBoolean("THEME_KEY", false)) {
-                    editor.putBoolean("THEME_KEY", false);
+                if (sharedPreferences.getBoolean(Constants.THEME_KEY, false)) {
+                    editor.putBoolean(Constants.THEME_KEY, false);
                     editor.apply()
-                    Log.d("@@@", "Edited false!")
                 } else {
-                    editor.putBoolean("THEME_KEY", true)
+                    editor.putBoolean(Constants.THEME_KEY, true)
                     editor.apply()
-                    Log.d("@@@", "Edited true!")
                 }
                 context.startActivity(Intent(context, MainActivity::class.java))
                 (context as MainActivity).finishAffinity()
@@ -322,21 +317,6 @@ fun AskLocationPermission() {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     })
-
-
-    when {
-        permissionState.hasPermission -> {
-            Text(text = "Reading external permission is granted")
-        }
-        permissionState.shouldShowRationale -> {
-            Column {
-                Text(text = "Reading external permission is required by this app")
-            }
-        }
-        !permissionState.hasPermission && !permissionState.shouldShowRationale -> {
-            Text(text = "Permission fully denied. Go to settings to enable")
-        }
-    }
 }
 
 
