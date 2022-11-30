@@ -29,7 +29,7 @@ import androidx.navigation.NavHostController
 import com.example.bookproject.R
 import com.example.bookproject.addNew.AddNewActivity
 import com.example.bookproject.models.Book
-import com.example.bookproject.settingsScreen.SinglePermission
+import com.example.bookproject.settingsScreen.AskLocationPermission
 import com.example.bookproject.utils.Graph
 
 @Composable
@@ -40,7 +40,7 @@ fun BooksList(
     val context = LocalContext.current
 
 
-    SinglePermission() // for asking permission
+    AskLocationPermission() // for asking permission
 
     var sharedPreferences: SharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE)
     var colorBack = colorResource(id = R.color.lightColorBack)

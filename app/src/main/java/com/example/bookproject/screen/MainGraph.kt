@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.bookproject.BottomNavItem
 import com.example.bookproject.detailedView.DetailedView
 import com.example.bookproject.list.BooksList
+import com.example.bookproject.settingsScreen.AskLocationPermission
 import com.example.bookproject.settingsScreen.Settings
 import com.example.bookproject.utils.Graph
 
@@ -24,6 +25,7 @@ fun BottomBarGraph(navHostController: NavHostController ){
         composable(route = BottomNavItem.Settings.route){
             Settings()
         }
+
         detailNavGraph()
     }
 }

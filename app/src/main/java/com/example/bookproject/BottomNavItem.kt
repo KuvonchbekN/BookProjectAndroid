@@ -18,4 +18,5 @@ sealed class BottomNavItem(
         "settings",
         Icons.Default.Settings
     )
+
 }

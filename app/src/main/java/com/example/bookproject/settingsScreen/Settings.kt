@@ -301,7 +301,7 @@ fun SupportItem(icon: Int, mainText: String, onClick: () -> Unit, color: Color) 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun SinglePermission() {
+fun AskLocationPermission() {
     val permissionState =
         rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
     val lifecycleOwner = LocalLifecycleOwner.current
