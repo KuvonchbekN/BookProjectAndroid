@@ -1,14 +1,24 @@
+@file:JvmName("SettingsKt")
+
 package com.example.bookproject.settingsScreen
 
-import androidx.compose.foundation.Image
+import android.Manifest
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.content.SharedPreferences
+import android.util.Log
+import android.view.Gravity
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -17,27 +27,47 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.bookproject.ui.theme.Shapes
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.example.bookproject.MainActivity
 import com.example.bookproject.R
+import com.example.bookproject.ui.theme.Shapes
+import com.example.bookproject.utils.Constants
+import com.google.accompanist.permissions.*
 
 
 @ExperimentalMaterialApi
 @Composable
-fun SettingsScreen() {
-    Column() {
-        HeaderText()
-        GeneralOptionsUI()
-        SupportOptionsUI()
+fun Settings() {
+    val context = LocalContext.current
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE)
+
+    var colorBack = colorResource(id = R.color.lightColorBack)
+    var colorText = colorResource(id = R.color.darkColorText)
+    if (!sharedPreferences.getBoolean(Constants.THEME_KEY, false)) { //false is the default value
+        colorBack = colorResource(id = R.color.darkColorBack)
+        colorText = colorResource(id = R.color.lightColorText)
+    }
+
+
+    Column(
+        modifier = Modifier
+            .background(colorBack)
+            .fillMaxHeight()
+    ) {
+        HeaderText(colorText)
+        GeneralOptionsUI(colorText, colorText)
+        SupportOptionsUI(colorBack, colorText)
     }
 }
 
 
 @Composable
-fun HeaderText() {
+fun HeaderText(colorText: Color) {
     Text(
         text = stringResource(id = R.string.settings_tab_title),
         fontFamily = FontFamily.Serif,
-        color = colorResource(id = R.color.colorSecondary),
+        color = colorText,
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
@@ -50,7 +80,13 @@ fun HeaderText() {
 
 @ExperimentalMaterialApi
 @Composable
-fun GeneralOptionsUI() {
+fun GeneralOptionsUI(colorBack: Color, colorText: Color) {
+    val context = LocalContext.current
+
+    var sharedPreferences: SharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE)
+    var editor: SharedPreferences.Editor = sharedPreferences.edit()
+
+
     Column(
         modifier = Modifier
             .padding(horizontal = 14.dp)
@@ -59,7 +95,7 @@ fun GeneralOptionsUI() {
         Text(
             text = stringResource(R.string.general_settings),
             fontFamily = FontFamily.Serif,
-            color = colorResource(id = R.color.colorSecondary),
+            color = colorText,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
@@ -67,25 +103,41 @@ fun GeneralOptionsUI() {
         )
         GeneralSettingItem(
             icon = R.drawable.ic_rounded_notification,
-            mainText = stringResource(R.string.Notification),
-            subText = stringResource(R.string.customize_notification_text),
-            onClick = {}
+            mainText = stringResource(R.string.Theme),
+            subText = stringResource(R.string.customize_theme_text),
+            onClick = {
+                if (sharedPreferences.getBoolean(Constants.THEME_KEY, false)) {
+                    editor.putBoolean(Constants.THEME_KEY, false);
+                    editor.apply()
+                } else {
+                    editor.putBoolean(Constants.THEME_KEY, true)
+                    editor.apply()
+                }
+                context.startActivity(Intent(context, MainActivity::class.java))
+                (context as MainActivity).finishAffinity()
+            }, backColor = colorBack
         )
         GeneralSettingItem(
             icon = R.drawable.ic_more,
             mainText = stringResource(R.string.more_customization_text),
             subText = stringResource(R.string.customization_text_description),
-            onClick = {}
+            onClick = {}, colorBack
         )
     }
 }
 
 @ExperimentalMaterialApi
 @Composable
-fun GeneralSettingItem(icon: Int, mainText: String, subText: String, onClick: () -> Unit) {
+fun GeneralSettingItem(
+    icon: Int,
+    mainText: String,
+    subText: String,
+    onClick: () -> Unit,
+    backColor: Color
+) {
     Card(
         onClick = { onClick() },
-        backgroundColor = Color.White,
+        backgroundColor = backColor,
         modifier = Modifier
             .padding(bottom = 8.dp)
             .fillMaxWidth(),
@@ -145,16 +197,17 @@ fun GeneralSettingItem(icon: Int, mainText: String, subText: String, onClick: ()
 
 @ExperimentalMaterialApi
 @Composable
-fun SupportOptionsUI() {
+fun SupportOptionsUI(colorBack: Color, colorText: Color) {
     Column(
         modifier = Modifier
             .padding(horizontal = 14.dp)
             .padding(top = 10.dp)
+            .background(colorBack)
     ) {
         Text(
             text = stringResource(R.string.support_text),
             fontFamily = FontFamily.Serif,
-            color = colorResource(id = R.color.colorSecondary),
+            color = colorText,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
@@ -163,32 +216,36 @@ fun SupportOptionsUI() {
         SupportItem(
             icon = R.drawable.ic_whatsapp,
             mainText = stringResource(R.string.contact_text),
-            onClick = {}
+            onClick = {},
+            color = colorText
         )
         SupportItem(
             icon = R.drawable.ic_feedback,
             mainText = stringResource(R.string.feedback_text),
-            onClick = {}
+            onClick = {},
+            color = colorText
         )
         SupportItem(
             icon = R.drawable.ic_privacy_policy,
             mainText = stringResource(R.string.privacy_policy_text),
-            onClick = {}
+            onClick = {},
+            color = colorText
         )
         SupportItem(
             icon = R.drawable.ic_about,
             mainText = stringResource(R.string.about_text),
-            onClick = {}
+            onClick = {},
+            color = colorText
         )
     }
 }
 
 @ExperimentalMaterialApi
 @Composable
-fun SupportItem(icon: Int, mainText: String, onClick: () -> Unit) {
+fun SupportItem(icon: Int, mainText: String, onClick: () -> Unit, color: Color) {
     Card(
         onClick = { onClick() },
-        backgroundColor = Color.White,
+        backgroundColor = color,
         modifier = Modifier
             .padding(bottom = 8.dp)
             .fillMaxWidth(),
@@ -235,3 +292,34 @@ fun SupportItem(icon: Int, mainText: String, onClick: () -> Unit) {
         }
     }
 }
+
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun AskLocationPermission() {
+    val permissionState =
+        rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    Log.d("@@", "asking for permission")
+
+    DisposableEffect(key1 = lifecycleOwner, effect = {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_START -> {
+                    permissionState.launchPermissionRequest()
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    })
+}
+
+
+
+
+

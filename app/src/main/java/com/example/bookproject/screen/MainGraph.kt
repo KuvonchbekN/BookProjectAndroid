@@ -1,19 +1,22 @@
 package com.example.bookproject.screen
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModelStore
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.bookproject.BottomNavItem
 import com.example.bookproject.detailedView.DetailedView
 import com.example.bookproject.list.BooksList
-import com.example.bookproject.settings.Settings
+import com.example.bookproject.settingsScreen.AskLocationPermission
+import com.example.bookproject.settingsScreen.Settings
 import com.example.bookproject.utils.Graph
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomBarGraph(navHostController: NavHostController ){
+
+
     NavHost(navController = navHostController, route = Graph.HOME, startDestination = BottomNavItem.BookList.route){
         composable(route = BottomNavItem.BookList.route){
             BooksList(navHostController)
@@ -22,6 +25,7 @@ fun BottomBarGraph(navHostController: NavHostController ){
         composable(route = BottomNavItem.Settings.route){
             Settings()
         }
+
         detailNavGraph()
     }
 }

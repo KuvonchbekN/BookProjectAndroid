@@ -1,6 +1,8 @@
 package com.example.bookproject.list
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,11 +24,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.bookproject.R
 import com.example.bookproject.addNew.AddNewActivity
 import com.example.bookproject.models.Book
+import com.example.bookproject.settingsScreen.AskLocationPermission
+import com.example.bookproject.utils.Constants
 import com.example.bookproject.utils.Graph
 
 @Composable
@@ -35,22 +38,31 @@ fun BooksList(
     viewModel: ListViewModel = ListViewModel()
 ) {
     val context = LocalContext.current
+    AskLocationPermission() // for asking permission
+
+    var sharedPreferences: SharedPreferences = context.getSharedPreferences("theme", MODE_PRIVATE)
+    var colorBack = colorResource(id = R.color.lightColorBack)
+    var colorText = colorResource(id = R.color.darkColorText)
+    if (!sharedPreferences.getBoolean(Constants.THEME_KEY, false)) { //false is the default value
+        colorBack = colorResource(id = R.color.darkColorBack)
+        colorText = colorResource(id = R.color.lightColorText)
+    }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         val books by viewModel.booksLiveData.observeAsState()
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
-                .background(colorResource(id = R.color.book_list_b_color))
+                .background(colorBack)
                 .padding(0.dp, 0.dp, 0.dp, 50.dp)
         ) {
             books?.let {
                 items(items = it.toList(), itemContent = { item ->
                     BookItem(book = item, onBookClick = { bookId ->
                         navController.navigate("${Graph.DETAILS}/${bookId}")
-                    })
+                    }, colorText)
                 })
             }
         }
@@ -71,13 +83,13 @@ fun BooksList(
 }
 
 @Composable
-fun BookItem(book: Book, onBookClick: (String) -> Unit) {
+fun BookItem(book: Book, onBookClick: (String) -> Unit, color: Color) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(15.dp, 10.dp, 15.dp, 0.dp)
         .clickable { onBookClick(book.id.toString()) }) {
-        Name(name = book.name)
-        Description(description = book.description)
+        Name(name = book.name, color = color)
+        Description(description = book.description, color)
         Divider(
             modifier = Modifier
                 .padding(top = 10.dp)
@@ -87,10 +99,10 @@ fun BookItem(book: Book, onBookClick: (String) -> Unit) {
 }
 
 @Composable
-fun Name(name: String) {
+fun Name(name: String, color: Color) {
     Text(
         text = name,
-        color = Color.Black,
+        color = color,
         fontSize = 20.sp,
         fontFamily = FontFamily.Serif,
         textAlign = TextAlign.Center
@@ -98,11 +110,11 @@ fun Name(name: String) {
 }
 
 @Composable
-fun Description(description: String) {
+fun Description(description: String, color: Color) {
     Text(
         text = description,
-        color = Color.DarkGray,
-        fontSize = 20.sp,
+        color = color,
+        fontSize = 12.sp,
         fontFamily = FontFamily.Serif,
         textAlign = TextAlign.Center
     )
